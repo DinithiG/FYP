@@ -1,16 +1,27 @@
-import numpy as np
 import os
-import librosa
-import random
+import numpy as np
+import torch
+import torchaudio
+from torch.utils.data import Dataset, DataLoader
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, f1_score
+import torch.nn as nn
+import torch.optim as optim
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 
-# Load the segment labels
-train_seglab = np.load("/kaggle/input/partialspoof/NewData/segment_labels/train_seglab_0.16.npy", allow_pickle=True).item()
+# Set device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# List of audio files from the train set
-train_audio_files = list(train_seglab.keys())
+if __name__ == "__main__":
+    audio_dir = "/kaggle/input/partialspoof/NewData/train2/con_wav"
+    label_file = "/kaggle/input/partialspoof/NewData/segment_labels/train_seglab_0.16.npy"
+    print("Initializing dataset...")
+    dataset = AudioDataset(audio_dir, label_file, subset_ratio=0.7, max_frames=100)
+    print("\nPreparing data...")
+    segments, labels = prepare_data(dataset)
+    print("\nStarting training...")
+    trained_model = train_and_evaluate(segments, labels, num_epochs=50)
 
-# Select 5% of the dataset
-subset_files = random.sample(train_audio_files, int(0.05 * len(train_audio_files)))
-
-# Example of how the audio files and their corresponding labels look
-print(subset_files[:5])
+    # Save the trained model
+    torch.save(trained_model.state_dict(), "/kaggle/working/trained_model.pth")
+    print("Trained model saved to /kaggle/working/trained_model.pth")
