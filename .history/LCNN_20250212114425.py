@@ -1,4 +1,3 @@
-import torch.nn as nn
 class LCNN(nn.Module):
     def __init__(self, input_dim=124 + 12 + 7 + 6 + 128, num_classes=1):  # Updated input_dim to include all features
         super(LCNN, self).__init__()

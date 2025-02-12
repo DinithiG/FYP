@@ -51,7 +51,7 @@ def train_and_evaluate(train_segments, train_labels, dev_segments, dev_labels, n
             print("Early stopping triggered")
             break
     print("\nTraining Complete. Best Dev F1:", best_f1)
-    torch.save(best_model_state_dict, "/Users/firefly0118/Documents/Uni/L6 - final year/FYP/Documentation Drive /trained_model_best.pth")
-    print("Best model saved")
+    torch.save(best_model_state_dict, "/kaggle/working/trained_model_best.pth")
+    print("Best model saved to /kaggle/working/trained_model_best.pth")
     return best_model_state_dict
 
