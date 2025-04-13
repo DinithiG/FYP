@@ -109,9 +109,6 @@ class AudioDataset(Dataset):
             cqt = np.abs(cqt)  # Take the magnitude of the CQT
             cqt = torch.tensor(cqt, dtype=torch.float32)
 
-            # Compute Chroma Features
-            # Removing Chroma feature extraction
-
             # Compute Spectral Contrast
             spectral_contrast = librosa.feature.spectral_contrast(S=np.abs(librosa.stft(waveform.numpy())), sr=16000)
             spectral_contrast = torch.tensor(spectral_contrast, dtype=torch.float32)
